@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyRetrofit</string>
+
+    <string name="chosen_time">%1$s:%2$s-%3$s:%4$s</string>
+    <string name="chosen_time_continuous">星期%1$s~星期%2$s</string>
+    <string name="chosen_one_day">星期%1$s</string>
+    <string name="all_day">全天24小时</string>
+</resources>
