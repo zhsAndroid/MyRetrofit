@@ -1,18 +1,24 @@
 package zhs.com.myretrofit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import zhs.com.myretrofit.model.response.BookResponse;
 import zhs.com.myretrofit.model.response.LoginResponse;
+import zhs.com.myretrofit.model.response.SysVerInfoResponse;
 import zhs.com.myretrofit.presenter.BookService;
 import zhs.com.myretrofit.presenter.LoginService;
 import zhs.com.myretrofit.presenter.RetrofitBookPresenter;
 import zhs.com.myretrofit.presenter.RetrofitPresenter;
+import zhs.com.myretrofit.presenter.SysVerInfoService;
+import zhs.com.myretrofit.utils.AppNameUtil;
 import zhs.com.myretrofit.utils.LogUtils;
+import zhs.com.myretrofit.view.AccountInfoActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,9 +36,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        LogUtils.e(TAG,"onCreate===1==");
 //        tvShow = (TextView) findViewById(R.id.tv_show);
 
         goLogin("cdjyj","123456","","","app");
+//        LogUtils.e(TAG, "----getVersionCode--------" + AppNameUtil.getVersionCode(this));
+//        LogUtils.e(TAG, "----getVersionName--------" + AppNameUtil.getVersionName(this));
+
+        getSysVerInfo(AppNameUtil.getVersionName(this), "app");
+
+        tvShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AccountInfoActivity.class));
+            }
+        });
 
     }
 
@@ -44,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(LoginResponse data) {
-                LogUtils.e(TAG,"登录返回值====="+data.toString());
-                tvShow.setText(""+data.toString());
-                getBookMessage();
+//                LogUtils.e(TAG,"登录返回值====="+data.toString());
+//                tvShow.setText(""+data.toString());
+//                getBookMessage();
             }
 
             @Override
@@ -56,12 +74,31 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void getSysVerInfo(String version, String requestSource) {
+        RetrofitPresenter.request(RetrofitPresenter.createApi(SysVerInfoService.class).getSysVerInfo(version, requestSource),
+                new RetrofitPresenter.IResponseListener<SysVerInfoResponse>() {
+                    @Override
+                    public void onSuccess(SysVerInfoResponse mSysVerInfoResponse) {
+//                        LogUtils.e(TAG, "系统版本===" + mSysVerInfoResponse.toString());
+//                        if (mSysVerInfoResponse.getData() != null) {
+//                            LjApplication.getInstance().mSysVerInfoResponse = mSysVerInfoResponse.getData();
+//
+//                        }
+                    }
+
+                    @Override
+                    public void onFail(String res) {
+                        LogUtils.e(TAG, "系统版本===" + res.toString());
+                    }
+                });
+    }
+
     private void getBookMessage() {
         RetrofitBookPresenter.request(RetrofitBookPresenter.createApi(BookService.class).getBookInfo(),
                 new RetrofitBookPresenter.IResponseListener<BookResponse>() {
                     @Override
                     public void onSuccess(BookResponse data) {
-                        LogUtils.e(TAG,"Book返回值====="+data.toString());
+//                        LogUtils.e(TAG,"Book返回值====="+data.toString());
                         tvBookView.setText("" + data.toString());
                     }
 
@@ -70,5 +107,41 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LogUtils.e(TAG,"onStart==1===");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtils.e(TAG,"onResume==1===");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogUtils.e(TAG,"onPause===1==");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LogUtils.e(TAG,"onStop===1==");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LogUtils.e(TAG,"onDestroy===1==");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        LogUtils.e(TAG,"onRestart===1==");
     }
 }
